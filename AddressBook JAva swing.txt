@@ -1,0 +1,804 @@
+import java.awt.*;  
+import java.awt.event.*;  
+import javax.swing.*;     
+import javax.swing.table.*;
+import java.util.ArrayList; 
+    
+class MainFrame extends JFrame{   
+	private JLabel lbl,lblfooter;
+	private JButton btn1,btn2,btn3,btn4,btn5;
+	
+	MainFrame(){   
+		setSize(400,450);    
+		setDefaultCloseOperation(EXIT_ON_CLOSE);    
+		setTitle("Address Book");   
+		setLocationRelativeTo(null);
+		
+		lbl=new JLabel("ADDRESS BOOK");
+		lbl.setHorizontalAlignment(lbl.CENTER);
+		lbl.setFont(new Font("TimesRoman",Font.BOLD ,30));
+		add("North",lbl);
+		
+		JPanel p1 = new JPanel(new GridLayout(5, 1, 10, 30));
+		JPanel p2=new JPanel();
+		
+		btn1=new JButton("CreateNew");
+		btn2=new JButton("Search");
+		btn3=new JButton("Update");
+		btn4=new JButton("Delete");
+		btn5=new JButton("View");
+		
+		p1.add(btn1);
+		p1.add(btn2);
+		p1.add(btn3);
+		p1.add(btn4);
+		p1.add(btn5);
+		p2.add(p1);
+		add("Center",p2);
+		
+		JPanel footer=new JPanel();
+		
+		lblfooter=new JLabel(" All rights reserved ");
+		
+		add("South",lblfooter);
+		
+		btn1.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				new CreateNew().setVisible(true);
+				dispose(); 
+				//	
+			}
+		});
+		
+		
+		btn5.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				dispose();
+				new View().setVisible(true); 
+				//	
+			}
+		});
+		
+		
+		
+		btn2.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				new Search().setVisible(true);
+				dispose(); 
+				//	
+			}
+		});
+		
+		btn3.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				new SearchUpdate().setVisible(true);
+				dispose(); 
+				//	
+			}
+		});
+		
+		btn4.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				dispose();
+				new Delete().setVisible(true); 
+				//	
+			}
+		});
+		
+	}
+	
+	
+		
+}
+
+class Delete extends JFrame{
+	
+		private JLabel fname,fname1,lname,address,contact,email,lbl;
+		private JTextField txtfname;
+		private JButton btnDelete,btnCancel;
+	
+	Delete(){   
+		setSize(400,450);    
+		setDefaultCloseOperation(EXIT_ON_CLOSE);    
+		setTitle("Delete");   
+		setLocationRelativeTo(null);
+		
+		lbl=new JLabel("Delete");
+		lbl.setHorizontalAlignment(lbl.CENTER);
+		lbl.setFont(new Font("TimesRoman",Font.BOLD ,30));
+		add("North",lbl);
+		btnDelete=new JButton("Delete");
+			
+		JPanel panel=new JPanel(new GridLayout(1,2));
+		JPanel smallpanel=new JPanel(new FlowLayout());
+			
+		fname=new JLabel("Enter First Name :");
+		txtfname=new JTextField(20);
+			
+		btnCancel=new JButton("Cancel");
+		smallpanel.add(fname);
+			
+		smallpanel.add(txtfname);
+		smallpanel.add(btnDelete);
+		smallpanel.add(btnCancel);
+		add(smallpanel);
+		
+		btnDelete.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				String temp1=txtfname.getText();
+				for(DTO temp2:BookDataBase.bList){
+						if(temp2.fName.equals(temp1)){
+							
+							new Last(temp2).setVisible(true);
+							dispose();
+							return;
+						}	
+					
+				}
+				JOptionPane.showMessageDialog(null, "not Found","",JOptionPane.WARNING_MESSAGE);	
+					
+				//	
+			}
+		});
+		
+		btnCancel.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				dispose();
+				new MainFrame().setVisible(true); 
+				//	
+			}
+		});
+		
+	}
+}
+
+class Last extends JFrame{
+		private JLabel lbl,fname,fname1,lname,lname1,address,address1,contact,contact1,email,email1;
+		private JButton btnDelete,btnCancel;
+		Last(DTO temp){   
+			setSize(400,450);    
+			setDefaultCloseOperation(EXIT_ON_CLOSE);    
+			setTitle("Delete");   
+			setLocationRelativeTo(null);
+			
+			lbl=new JLabel("Delete");
+			lbl.setHorizontalAlignment(lbl.CENTER);
+			lbl.setFont(new Font("TimesRoman",Font.BOLD ,30));
+			add("North",lbl);
+			
+			JPanel panel= new JPanel(new GridLayout(5,2));
+			fname=new JLabel("First Name");
+			fname1=new JLabel(temp.fName);
+			lname=new JLabel("Last Name");
+			lname1=new JLabel(temp.lName);
+			address=new JLabel("Address");
+			address1=new JLabel(temp.contact);
+			contact=new JLabel("Contact");
+			contact1=new JLabel(temp.address);
+			email=new JLabel("Email");
+			email1=new JLabel(temp.email);
+			
+			panel.add(fname);
+			panel.add(fname1);
+			panel.add(lname);
+			panel.add(lname1);
+			panel.add(address);
+			panel.add(address1);
+			panel.add(contact);
+			panel.add(contact1);
+			panel.add(email);
+			panel.add(email1);
+			add("Center",panel);
+			
+			JPanel panel2=new JPanel(new FlowLayout(FlowLayout.CENTER));
+			
+			btnDelete=new JButton("Confirm Delete");
+			btnCancel=new JButton("Cancel");
+			
+			panel2.add(btnDelete);
+			panel2.add(btnCancel);
+			
+			add("South",panel2);
+			
+			
+			btnDelete.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				dispose();
+				BookDataBase.bList.remove(temp);
+				new MainFrame().setVisible(true); 
+				//	
+			}
+		});
+			
+			btnCancel.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				dispose();
+				new MainFrame().setVisible(true); 
+				//	
+			}
+		});
+			
+
+	}
+}
+
+
+class SearchUpdate extends JFrame{
+		private JLabel fname,fname1,lname,address,contact,email,lbl;
+		private JTextField txtfname;
+		private JButton btnUpdate,btnCancel;
+		SearchUpdate(){
+			setSize(300,250);    
+			setDefaultCloseOperation(EXIT_ON_CLOSE);    
+			setTitle("Update Details");   
+			setLocationRelativeTo(null);
+		
+			lbl=new JLabel("Update Details");
+			lbl.setHorizontalAlignment(lbl.CENTER);
+			lbl.setFont(new Font("TimesRoman",Font.BOLD ,30));
+			add("North",lbl);
+			
+			btnUpdate=new JButton("Update");
+			
+			JPanel panel=new JPanel(new GridLayout(1,2));
+			JPanel smallpanel=new JPanel(new FlowLayout());
+			
+			fname=new JLabel("Enter First Name :");
+			txtfname=new JTextField(20);
+			
+			btnCancel=new JButton("Cancel");
+			smallpanel.add(fname);
+			
+			smallpanel.add(txtfname);
+			smallpanel.add(btnUpdate);
+			smallpanel.add(btnCancel);
+			add(smallpanel);
+			
+			btnUpdate.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				String temp1=txtfname.getText();
+				for(DTO temp2:BookDataBase.bList){
+						if(temp2.fName.equals(temp1)){
+							
+							new Update(temp2).setVisible(true);
+							dispose();
+							return;
+						}	
+					
+				}
+				JOptionPane.showMessageDialog(null, "not Found","",JOptionPane.WARNING_MESSAGE);	
+					
+				//	
+			}
+		});
+		
+				btnCancel.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				dispose();
+				new MainFrame().setVisible(true); 
+				//	
+			}
+		});
+		
+			
+			}
+}
+
+
+class Update extends JFrame{
+		private JLabel lblHeading,lblFname,lblFname2,lblLname,lblAddress,lblContact,lblEmail;
+		private JButton btnSave,btnCancel;
+		private JTextField txtFname,txtLname,txtAddress,txtContact,txtEmail;
+	
+		
+		
+		
+		Update(DTO Object){
+			setSize(500,450);    
+			setDefaultCloseOperation(EXIT_ON_CLOSE);    
+			setTitle("Update ");   
+			setLocationRelativeTo(null);
+		
+			lblHeading=new JLabel("Update");
+			lblHeading.setHorizontalAlignment(lblHeading.CENTER);
+			lblHeading.setFont(new Font("TimesRoman",Font.BOLD ,30));
+			add("North",lblHeading);
+			
+			lblFname=new JLabel("First Name");
+			lblFname2=new JLabel(Object.fName);
+			lblLname=new JLabel("Last Name");
+			lblAddress=new JLabel("Address");
+			lblContact=new JLabel("Contact");
+			lblEmail=new JLabel("Email");
+		
+			
+			txtLname=new JTextField();
+			txtAddress=new JTextField();
+			txtContact=new JTextField(20);
+			 txtContact.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0') || (caracter > '9'))
+                        && (caracter != '\b')) {
+                    e.consume();
+                }
+            }
+        });
+			txtEmail=new JTextField();
+		
+			JPanel p1=new JPanel(new GridLayout(2, 2, 10, 0));
+			JPanel p3=new JPanel(new GridLayout(2, 1, 10, 0));
+			JPanel p4=new JPanel(new GridLayout(2, 1, 10, 0));
+			JPanel p5=new JPanel(new GridLayout(2, 1, 10, 0));
+			JPanel p6=new JPanel(new FlowLayout(FlowLayout.RIGHT));
+			JPanel pMain=new JPanel(new GridLayout(4, 1, 10, 10));
+			JPanel pContact=new JPanel(new FlowLayout(FlowLayout.LEFT));
+		
+			btnSave=new JButton("Update");
+			btnCancel=new JButton("Cancel");
+			p6.add(btnSave);
+			p6.add(btnCancel);
+		
+			p1.add(lblFname);
+			p1.add(lblLname);
+			p1.add(lblFname2);
+			p1.add(txtLname);
+			p3.add(lblAddress);
+			p3.add(txtAddress);
+			p4.add(lblContact);
+			pContact.add(txtContact);
+			p4.add(pContact);
+			p5.add(lblEmail);
+			p5.add(txtEmail);
+		
+		
+			pMain.add(p1);
+		
+			pMain.add(p3);
+			pMain.add(p4);
+			pMain.add(p5);
+			add("Center",pMain);
+			add("South",p6);
+			
+		btnSave.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				
+				String lname= txtLname.getText();
+				String contact=txtContact.getText();
+				String address= txtAddress.getText();
+				String email= txtEmail.getText();
+				
+				
+				
+				if( lname.length()>0 && contact.length()>0 && address.length()>0){
+					
+					//BookDataBase.bList.add(new DTO(fname,lname,address,contact,email));
+					Object.lName=lname;
+					Object.contact=contact;
+					Object.address=address;
+					Object.email=email;
+					
+					
+					JOptionPane.showMessageDialog(null, "Saved","",JOptionPane.WARNING_MESSAGE);
+					dispose();
+					new MainFrame().setVisible(true); 
+            
+                
+               
+            }else{
+                JOptionPane.showMessageDialog(null, "Plese add All fields","",JOptionPane.ERROR_MESSAGE);
+            }
+            
+            
+       
+				//	
+			}
+		});	
+		
+		
+		btnCancel.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				dispose();
+				new MainFrame().setVisible(true); 
+				//	
+			}
+		});
+		}
+}
+
+class Search  extends JFrame{
+	private JLabel lbl,name;
+	private JTextField txt;
+	private JButton btnSearch,btnCancel;
+	
+	
+	Search(){   
+		setSize(400,150);    
+		setDefaultCloseOperation(EXIT_ON_CLOSE);    
+		setTitle("Search");   
+		setLocationRelativeTo(null);
+		
+		lbl=new JLabel("SEARCH");
+		lbl.setHorizontalAlignment(lbl.CENTER);
+		lbl.setFont(new Font("TimesRoman",Font.BOLD ,30));
+		add("North",lbl);
+		
+		JPanel p1=new JPanel(new BorderLayout());
+		JPanel p2=new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		
+		
+		name=new JLabel("Enter Name");
+		txt=new JTextField(10);
+		
+		btnSearch=new JButton("Search");
+		btnCancel=new JButton("Cancel");
+		p1.add("West",name);
+		p1.add("Center",txt);
+		p2.add(btnSearch);
+		p2.add(btnCancel);
+		add("Center",p1);
+		add("South",p2);
+		
+		
+		
+		btnSearch.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				String temp1=txt.getText();
+				for(DTO temp:BookDataBase.bList){
+						if(temp1.equals(temp.fName)){
+							String[] searchObject={temp.fName,temp.lName,temp.address,temp.contact,temp.email};
+							new SearchResults(searchObject).setVisible(true);
+							dispose();
+							return;
+						}	
+					
+				}
+				JOptionPane.showMessageDialog(null, "not Found","",JOptionPane.WARNING_MESSAGE);	
+					
+				//	
+			}
+		});
+		
+		btnCancel.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				dispose();
+				
+				new MainFrame().setVisible(true); 
+				//	
+			}
+		});
+	}
+
+
+}
+
+
+class SearchResults extends JFrame {
+	private JLabel lblHeading,lblfName,lbllName,lblAddress,lblContact,lblEmail;
+	private JButton btnOK;
+	SearchResults(String[] searchObject){
+		setSize(500,450);    
+		setDefaultCloseOperation(EXIT_ON_CLOSE);    
+		setTitle("Search Result");   
+		setLocationRelativeTo(null);
+		
+		lblHeading=new JLabel("Search Result");
+		lblHeading.setHorizontalAlignment(lblHeading.CENTER);
+		lblHeading.setFont(new Font("",Font.BOLD ,20));
+		add("North",lblHeading);
+	
+		String fName1=searchObject[0];
+		String lName1=searchObject[1];
+		String address1=searchObject[2];
+		String contact1=searchObject[3];
+		String email1=searchObject[4];
+		
+		lblfName=new JLabel("First Name :");
+		JLabel lblfName1=new JLabel(fName1);
+		lbllName=new JLabel("Last Name :");
+		JLabel lbllName1=new JLabel(lName1);
+		lblAddress=new JLabel("Address :");
+		JLabel lblAddress1=new JLabel(address1);
+		lblContact=new JLabel("Contact :");
+		JLabel lblContact1=new JLabel(contact1);
+		lblEmail=new JLabel("Email :");
+		JLabel lblEmail1=new JLabel(email1);
+		
+		JPanel panel=new JPanel(new GridLayout(5,2));
+		panel.add(lblfName);
+		panel.add(lblfName1);
+		panel.add(lbllName);
+		panel.add(lbllName1);
+		panel.add(lblAddress);
+		panel.add(lblAddress1);
+		panel.add(lblContact);
+		panel.add(lblContact1);
+		panel.add(lblEmail);
+		panel.add(lblEmail1);
+		
+		btnOK=new JButton("OK");
+		JPanel p1=new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		
+		p1.add(btnOK);
+		add("South",p1);
+		
+		add("Center",panel);
+		
+		btnOK.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				dispose();
+				new MainFrame().setVisible(true); 
+				//	
+			}
+		});
+	
+	}
+}
+
+class  CreateNew extends JFrame{
+	private JLabel lblHeading,lblFname,lblLname,lblAddress,lblContact,lblEmail;
+	private JButton btnSave,btnCancel;
+	private JTextField txtFname,txtLname,txtAddress,txtContact,txtEmail;
+	
+	CreateNew(){
+		setSize(500,450);    
+		setDefaultCloseOperation(EXIT_ON_CLOSE);    
+		setTitle("Create New Contact");   
+		setLocationRelativeTo(null);
+		
+		lblHeading=new JLabel("Create New Contact");
+		lblHeading.setHorizontalAlignment(lblHeading.CENTER);
+		lblHeading.setFont(new Font("",Font.BOLD ,20));
+		add("North",lblHeading);
+		
+		lblFname=new JLabel("First Name");
+		lblLname=new JLabel("Last Name");
+		lblAddress=new JLabel("Address");
+		lblContact=new JLabel("Contact");
+		lblEmail=new JLabel("Email");
+		
+		txtFname=new JTextField();
+		txtLname=new JTextField();
+		txtAddress=new JTextField();
+		txtContact=new JTextField(20);
+		 
+		txtContact.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0') || (caracter > '9'))
+                        && (caracter != '\b')) {
+                    e.consume();
+                }
+            }
+        });
+		txtEmail=new JTextField();
+		
+		JPanel p1=new JPanel(new GridLayout(2, 2, 10, 0));
+		JPanel p3=new JPanel(new GridLayout(2, 1, 10, 0));
+		JPanel p4=new JPanel(new GridLayout(2, 1, 10, 0));
+		JPanel p5=new JPanel(new GridLayout(2, 1, 10, 0));
+		JPanel p6=new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		JPanel pMain=new JPanel(new GridLayout(4, 1, 10, 10));
+		JPanel pContact=new JPanel(new FlowLayout(FlowLayout.LEFT));
+		
+		btnSave=new JButton("Save");
+		btnCancel=new JButton("Cancel");
+		p6.add(btnSave);
+		p6.add(btnCancel);
+		
+		p1.add(lblFname);
+		p1.add(lblLname);
+		p1.add(txtFname);
+		p1.add(txtLname);
+		p3.add(lblAddress);
+		p3.add(txtAddress);
+		p4.add(lblContact);
+		pContact.add(txtContact);
+		p4.add(pContact);
+		p5.add(lblEmail);
+		p5.add(txtEmail);
+		
+		
+		pMain.add(p1);
+		
+		pMain.add(p3);
+		pMain.add(p4);
+		pMain.add(p5);
+		add("Center",pMain);
+		add("South",p6);
+		
+		btnSave.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				String fname=txtFname.getText();
+				String lname= txtLname.getText();
+				String contact=txtContact.getText();
+				String address= txtAddress.getText();
+				String email= txtEmail.getText();
+				
+				
+				
+				if(fname.length()>0 && lname.length()>0 && contact.length()>0 && address.length()>0){
+					
+					BookDataBase.bList.add(new DTO(fname,lname,address,contact,email));
+					
+					JOptionPane.showMessageDialog(null, "Saved","",JOptionPane.WARNING_MESSAGE);
+					dispose();
+					new MainFrame().setVisible(true); 
+            
+                
+               
+            }else{
+                JOptionPane.showMessageDialog(null, "Plese add All fields","",JOptionPane.ERROR_MESSAGE);
+            }
+            
+            
+       
+				//	
+			}
+		});
+		
+		
+		
+		btnCancel.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				dispose();
+				new MainFrame().setVisible(true); 
+				//	
+			}
+		});
+	}
+	
+}
+
+
+class View extends JFrame{
+	private DefaultTableModel dtm;
+	private JTable bTable;
+	private JButton btnOK;
+	
+	View(){   
+		setSize(500,300);    
+		setDefaultCloseOperation(EXIT_ON_CLOSE);    
+		setTitle("View All Saved");   
+	
+		String[] columnNames={"First Name", "Last Name", "Address", "Contact","Email"};
+		dtm=new DefaultTableModel(columnNames,0); //0->no of rows
+		bTable=new JTable(dtm);
+		JScrollPane tablePane=new JScrollPane(bTable);		
+		add("Center",tablePane);
+		
+		for(DTO temp:BookDataBase.bList){
+			String a=temp.fName;
+			String b=temp.lName;
+			String c=temp.address;
+			String d=temp.contact;
+			String e=temp.email;
+			
+			dtm.addRow(new String[]{a,b,c,d,e});
+			}
+			
+		JPanel okPanel=new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		btnOK=new JButton("OK");
+		okPanel.add(btnOK);
+		add("South",okPanel);
+		
+		btnOK.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				//
+				dispose();
+				new MainFrame().setVisible(true); 
+				//	
+			}
+		});
+		
+		
+		
+	}
+}
+
+
+
+
+ class BookDataBase {
+    static ArrayList<DTO> bList= new ArrayList<>(); // book list
+
+    static {
+        
+            }
+}
+
+
+class DTO { //data transfer Object
+    String fName;
+     String lName;
+     String address;
+     String contact;
+	 String email;
+	
+    public DTO() {
+    }
+
+    public DTO(String fName, String lName, String address,String contact,String email) {
+        this.fName = fName;
+        this.lName = lName;
+        this.address = address;
+        this.contact = contact;
+        this.email = email;
+    }
+
+    public String getfname() {
+        return fName;
+    }
+
+    public void setfname(String fname) {
+        this.fName = fName;
+    }
+
+    public String getlName() {
+        return lName;
+    }
+
+    public void setlName(String lName) {
+        this.lName = lName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getcontact() {
+        return contact;
+    }
+
+    public void setSalary(String contact) {
+        this.contact = contact;
+    }
+    
+     public String getemail() {
+        return email;
+    }
+
+    public void setemail(String email) {
+        this.email = email;
+    }
+
+    /*@Override
+    public String toString() {
+        return "CustomerDTO{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", salary=" + salary +
+                '}';
+    }*/
+}
+
+
+class Demo{   //  
+	public static void main(String args[]) {          
+		new MainFrame().setVisible(true);
+		//new CreateNew().setVisible(true); 
+	}  
+}
